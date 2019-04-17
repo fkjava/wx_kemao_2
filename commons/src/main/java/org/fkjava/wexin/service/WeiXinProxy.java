@@ -8,7 +8,6 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.Charset;
 
 import org.fkjava.wexin.domain.User;
-import org.fkjava.wexin.processors.impl.SubscribeEventMessageProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service // 把当前类的对象加入Spring中管理
 public class WeiXinProxy {
 
-	private static final Logger LOG = LoggerFactory.getLogger(SubscribeEventMessageProcessor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(WeiXinProxy.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
 	@Autowired
 	private AccessTokenManager accessTokenManager;
