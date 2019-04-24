@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.fkjava.wexin.domain.InMessage;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
@@ -22,7 +21,10 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 	}
 
 	@Override
-	public InMessage deserialize(byte[] bytes) throws SerializationException {
+	public Object deserialize(byte[] bytes) throws SerializationException {
+		if (bytes == null) {
+			return null;
+		}
 		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
 		DataInputStream in = new DataInputStream(bis);
 		try {
@@ -38,7 +40,7 @@ public class JsonRedisSerializer extends Jackson2JsonRedisSerializer<Object> {
 
 			// len + 4 : len是类名的长度，4则是最开始的int的长度，它们去掉
 			Object o = objectMapper.readValue(Arrays.copyOfRange(bytes, len + 4, bytes.length), cla);
-			return (InMessage) o;
+			return o;
 
 		} catch (IOException | ClassNotFoundException e) {
 			throw new SerializationException(e.getLocalizedMessage(), e);
