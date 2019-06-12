@@ -1,0 +1,38 @@
+.item {
+	display: table;
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+}
+
+.item img {
+	width: 50px;
+}
+/*
+在Bootstrap框架里面，把一行分解成12等分的列。
+它们经常会使用类似于col-1、col-2这样的类来应用不同宽度。1表示占用1等分的宽度。
+*/
+.item .col-1 {
+	float: left;
+	width: 8%;
+}
+
+.item .col-10 {
+	float: left;
+	width: 83%;
+}
+
+.buttons {
+	padding-top: 13px;
+}
+
+.button {
+	padding: 5px 13px;
+	border-radius: 30px;
+	background-color: #aaa;
+	border: 1px solid #aaa;
+}
+
+.button:hover {
+	background-color: #fff;
+	cursor: pointer;
+}
