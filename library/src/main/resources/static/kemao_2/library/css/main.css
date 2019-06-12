@@ -36,3 +36,8 @@
 	background-color: #fff;
 	cursor: pointer;
 }
+
+.item .remove {
+	float: right;
+	border: 1px solid #aaa;
+}

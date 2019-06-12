@@ -39,7 +39,7 @@
 				<span>${book.name }</span>
 			</div>
 			<div class="col-1 buttons">
-				<span class="button">+</span>
+				<a href="/kemao_2/library/debit?id=${book.id }" class="button">+</a>
 			</div>
 		</div>
 	</c:forEach>

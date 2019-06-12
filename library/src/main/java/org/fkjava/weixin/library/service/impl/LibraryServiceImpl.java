@@ -1,6 +1,9 @@
 package org.fkjava.weixin.library.service.impl;
 
+import java.util.LinkedList;
+
 import org.fkjava.weixin.library.domain.Book;
+import org.fkjava.weixin.library.domain.DebitList;
 import org.fkjava.weixin.library.repository.BookRepository;
 import org.fkjava.weixin.library.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +43,66 @@ public class LibraryServiceImpl implements LibraryService {
 			page = this.bookRepository.findByDisabledFalseAndNameContaining(keyword, pageable);
 		}
 		return page;
+	}
+
+	@Override
+	public void add(String id, DebitList debitList) {
+		// 调用方法返回的对象，都可能为null，所以要养成一个习惯：尽量检查一下别人传递过来或者返回的对象是否为null
+		if (debitList.getBooks() == null) {
+			debitList.setBooks(new LinkedList<>());
+		}
+		// 1.检查debitList里面是否有id相同的图书，如果有则不能加入
+		boolean exists = false;
+		for (Book b : debitList.getBooks()) {
+			if (b.getId().equals(id)) {
+				exists = true;
+				break;
+			}
+		}
+		if (!exists) {
+//			// 2.根据id查询图书
+//			this.bookRepository
+//					// 根据id查询对象，可能找不到
+//					.findById(id)
+//					// 如果存在，则执行括号里面的代码
+//					.ifPresent(book -> {
+//						// 3.加入借阅列表中
+//						debitList.getBooks().add(book);
+//					});
+
+//			// 2.根据id查询图书
+//			this.bookRepository
+//					// 根据id查询对象，可能找不到
+//					.findById(id)
+//					// 如果存在，则执行括号里面的代码
+//					.ifPresent(new Consumer<Book>() {
+//						@Override
+//						public void accept(Book book) {
+//							debitList.getBooks().add(book);
+//						}
+//					});
+
+			// 2.根据id查询图书
+			this.bookRepository
+					// 根据id查询对象，可能找不到
+					.findById(id)
+					// 如果存在，则执行括号里面的代码
+					// 3.加入借阅列表中
+					.ifPresent(debitList.getBooks()::add);
+		}
+	}
+
+	@Override
+	public void remove(String id, DebitList debitList) {
+		debitList.getBooks()
+				// 把集合转换为流（Stream）对象，可以用于流式编程。
+				.stream()
+				// 过滤需要的数据，需要找到图书的id跟传入的id参数相同的图书
+				// filter在没有执行find之前不会计算（在函数式编程里面这个叫做【延迟计算】）
+				.filter(book -> book.getId().equals(id))
+				// 找到过滤之后的第一个结果
+				.findFirst()
+				// 从集合里面删除找到的图书
+				.ifPresent(debitList.getBooks()::remove);
 	}
 }
